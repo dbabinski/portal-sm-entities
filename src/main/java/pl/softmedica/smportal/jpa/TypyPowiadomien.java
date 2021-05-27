@@ -132,7 +132,7 @@ public class TypyPowiadomien implements Serializable, InterfaceJSON<TypyPowiadom
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.TypyPowiadomien[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.TypyPowiadomien[ id=" + id + " ]";
     }
 
     @Override

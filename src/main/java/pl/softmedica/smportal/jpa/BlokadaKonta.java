@@ -112,7 +112,7 @@ public class BlokadaKonta implements Serializable, InterfaceJSON<BlokadaKonta>, 
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.BlokadaKonta[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.BlokadaKonta[ id=" + id + " ]";
     }
 
     @Override

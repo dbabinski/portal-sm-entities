@@ -187,7 +187,7 @@ public class JednorazoweKodyDostepu implements Serializable, InterfaceJSON<Jedno
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.JednorazoweKodyDostepu[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.JednorazoweKodyDostepu[ id=" + id + " ]";
     }
 
     public static final JSONArray POLA_WYMAGANE = new JSONArrayBuilder()

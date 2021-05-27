@@ -147,7 +147,7 @@ public class ParametryHasla implements Serializable, InterfaceJSON<ParametryHasl
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.ParametryHasla[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.ParametryHasla[ id=" + id + " ]";
     }
 
     @Override

@@ -179,7 +179,7 @@ public class KonfiguracjaSerweraPoczty implements Serializable, InterfaceJSON<Ko
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.KonfiguracjaSerweraPoczty[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.KonfiguracjaSerweraPoczty[ id=" + id + " ]";
     }
 
     @Override

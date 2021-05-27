@@ -143,7 +143,7 @@ public class KonfiguracjaSerweraSms implements Serializable, InterfaceJSON<Konfi
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.KonfiguracjaSerweraSms[ id=" + id + " ]";
+        return "pl.softmedica.smportal.zarzadzanie.jpa.KonfiguracjaSerweraSms[ id=" + id + " ]";
     }
 
     @Override

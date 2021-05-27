@@ -158,7 +158,7 @@ public class Kontrahenci implements Serializable, InterfaceJSON<Kontrahenci>,  I
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.Kontrahenci[ id=" + id + " ]";
+        return "pl.softmedica.smportal.zarzadzanie.jpa.Kontrahenci[ id=" + id + " ]";
     }
 
     @Override

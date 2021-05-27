@@ -179,7 +179,7 @@ public class Aktualnosci implements Serializable, InterfaceJSON<Aktualnosci>, In
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.portal.jpa.Aktualnosci[ id=" + id + " ]";
+        return "pl.softmedica.smportal.portal.jpa.Aktualnosci[ id=" + id + " ]";
     }
 
     @Override

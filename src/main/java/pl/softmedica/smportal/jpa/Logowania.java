@@ -150,7 +150,7 @@ public class Logowania implements Serializable, InterfaceJSON<Logowania>,  Inter
     
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.Logowania[ id=" + id + " ]";
+        return "pl.softmedica.smportal.zarzadzanie.jpa.Logowania[ id=" + id + " ]";
     }    
 
     public static Comparator<Logowania> COMPARATOR_BY_ID = (Logowania o1, Logowania o2) -> {

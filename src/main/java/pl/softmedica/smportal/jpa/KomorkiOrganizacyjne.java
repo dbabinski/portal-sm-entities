@@ -154,7 +154,7 @@ public class KomorkiOrganizacyjne implements Serializable, InterfaceJSON<Komorki
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.KomorkiOrganizacyjne[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.KomorkiOrganizacyjne[ id=" + id + " ]";
     }
 
     public JSONObject getJSON(boolean zNadrzednaKomorkaOrganizacyjna) {

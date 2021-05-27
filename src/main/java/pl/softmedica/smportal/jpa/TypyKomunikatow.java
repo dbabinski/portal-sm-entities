@@ -104,7 +104,7 @@ public class TypyKomunikatow implements Serializable, InterfaceJSON<TypyKomunika
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.TypyKomunikatow[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.TypyKomunikatow[ id=" + id + " ]";
     }
 
     @Override

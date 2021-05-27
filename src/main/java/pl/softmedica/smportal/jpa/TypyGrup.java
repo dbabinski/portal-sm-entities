@@ -104,7 +104,7 @@ public class TypyGrup implements Serializable, InterfaceJSON<TypyGrup>, Interfac
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.TypyGrup[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.TypyGrup[ id=" + id + " ]";
     }
 
     @Override

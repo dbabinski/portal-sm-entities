@@ -138,7 +138,7 @@ public class SzablonyPowiadomien implements Serializable, InterfaceJSON<Szablony
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.SzablonyPowiadomien[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.SzablonyPowiadomien[ id=" + id + " ]";
     }
 
     @Override

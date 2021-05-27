@@ -396,7 +396,7 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.Pacjenci[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.Pacjenci[ id=" + id + " ]";
     }
 
     @Override

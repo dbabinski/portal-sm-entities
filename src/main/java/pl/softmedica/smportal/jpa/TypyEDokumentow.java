@@ -104,7 +104,7 @@ public class TypyEDokumentow implements Serializable, InterfaceJSON<TypyEDokumen
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.TypyEDokumentow[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.TypyEDokumentow[ id=" + id + " ]";
     }
 
     @Override

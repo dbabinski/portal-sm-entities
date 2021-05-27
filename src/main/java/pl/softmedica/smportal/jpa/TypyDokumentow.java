@@ -134,7 +134,7 @@ public class TypyDokumentow implements Serializable, InterfaceJSON<TypyDokumento
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.TypyDokumentow[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.TypyDokumentow[ id=" + id + " ]";
     }
 
     @Override

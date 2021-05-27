@@ -141,7 +141,7 @@ public class Grupy implements Serializable, InterfaceJSON<Grupy>, InterfaceDatab
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.Grupy[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.Grupy[ id=" + id + " ]";
     }
 
     @Override

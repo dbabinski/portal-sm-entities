@@ -140,7 +140,7 @@ public class Dostep implements Serializable, InterfaceJSON<Dostep>, InterfaceDat
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.Dostep[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.Dostep[ id=" + id + " ]";
     }
 
     @Override

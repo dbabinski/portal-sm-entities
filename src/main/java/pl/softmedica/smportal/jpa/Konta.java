@@ -60,7 +60,7 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
 
     private static final long serialVersionUID = 5617677834356507782L;
 
-    private static final String SALT = "pl.softmedica.euslugi.zarzadzanie.konta.";
+    private static final String SALT = "pl.softmedica.smportal.zarzadzanie.konta.";
 
     @Id
     @SequenceGenerator(name = "uzytkownicy.konta_id_gen", sequenceName = "uzytkownicy.konta_id_seq", allocationSize = 1)
@@ -289,7 +289,7 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.Konta[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.Konta[ id=" + id + " ]";
     }
 
     @Override

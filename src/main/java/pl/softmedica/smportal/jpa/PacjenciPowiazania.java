@@ -122,7 +122,7 @@ public class PacjenciPowiazania implements Serializable, InterfaceJSON<PacjenciP
     
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.PracownicyPowiazania[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.PracownicyPowiazania[ id=" + id + " ]";
     }
     
     @Override

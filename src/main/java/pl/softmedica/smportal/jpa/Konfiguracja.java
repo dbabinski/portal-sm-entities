@@ -276,7 +276,7 @@ public class Konfiguracja implements Serializable, InterfaceJSON<Konfiguracja>, 
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.Konfiguracja[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.Konfiguracja[ id=" + id + " ]";
     }
 
     @Override

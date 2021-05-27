@@ -139,7 +139,7 @@ public class Tresci implements Serializable, InterfaceJSON<Tresci>, InterfaceDat
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.Tresci[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.Tresci[ id=" + id + " ]";
     }
 
     @Override

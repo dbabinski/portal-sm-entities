@@ -185,7 +185,7 @@ public class Pracownicy implements Serializable, InterfaceJSON<Pracownicy>, Inte
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.Pracownicy[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.Pracownicy[ id=" + id + " ]";
     }
 
     @Override

@@ -231,7 +231,7 @@ public class Logi implements Serializable, InterfaceJSON<Logi>,  InterfaceDataba
     
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.Logi[ id=" + id + " ]";
+        return "pl.softmedica.smportal.zarzadzanie.jpa.Logi[ id=" + id + " ]";
     }    
 
     public static Comparator<Logi> COMPARATOR_BY_ID = (Logi o1, Logi o2) -> {

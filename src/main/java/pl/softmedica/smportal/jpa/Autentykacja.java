@@ -150,7 +150,7 @@ public class Autentykacja implements Serializable, InterfaceJSON<Autentykacja>, 
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.Autentykacja[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.Autentykacja[ id=" + id + " ]";
     }
 
     @Override

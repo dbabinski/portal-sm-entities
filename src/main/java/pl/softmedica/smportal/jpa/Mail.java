@@ -137,7 +137,7 @@ public class Mail implements Serializable, InterfaceJSON<Mail>, InterfaceUUID<Ma
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.zarzadzanie.jpa.Mail[ uuid=" + uuid + " ]";
+        return "pl.softmedica.smportal.zarzadzanie.jpa.Mail[ uuid=" + uuid + " ]";
     }
 
     public Mail wyslij() throws MailException, NoSuchProviderException, MessagingException, Exception {
