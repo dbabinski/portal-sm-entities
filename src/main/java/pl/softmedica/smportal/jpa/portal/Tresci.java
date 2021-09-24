@@ -20,14 +20,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.json.simple.JSONObject;
-import pl.softmedica.ea.common.interfaces.InterfaceDatabaseObject;
-import pl.softmedica.ea.common.interfaces.InterfaceJSON;
-import pl.softmedica.ea.common.utilities.JSONBuilder;
-import pl.softmedica.ea.common.utilities.JSONObjectExt;
+import pl.softmedica.smportal.common.interfaces.InterfaceDatabaseObject;
+import pl.softmedica.smportal.common.interfaces.InterfaceJSON;
+import pl.softmedica.smportal.common.utilities.JSONBuilder;
+import pl.softmedica.smportal.common.utilities.JSONObjectExt;
 
 /**
  *
- * @author Krzysztof Depka Prądzyński <k.d.pradzynski@softmedica.pl>
+ * @author chiefu
  */
 @Entity
 @Table(schema = "portal", name = "tresci")

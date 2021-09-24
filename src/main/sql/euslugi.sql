@@ -961,25 +961,25 @@ BEGIN
 	--KODY --pkt 67,68,69
 	-------------------------
 
-        CREATE SCHEMA IF NOT EXISTS kody AUTHORIZATION softmedica;
+--         CREATE SCHEMA IF NOT EXISTS kody AUTHORIZATION softmedica;
 
         -------------------------
 	--KODY - JEDNORAZOWE KODY DOSTĘPU --pkt 67,68,69
 	-------------------------
-        IF serwis.czy_tabela_istnieje('jednorazowe_kody_dostepu', 'kody') = false 
-        THEN
-                CREATE TABLE kody.jednorazowe_kody_dostepu
-                (
-                    id serial,
-                    CONSTRAINT jednorazowe_kody_dostepu_pkey PRIMARY KEY (id)
-                );
-        END IF;
-
-        EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'kod', 'text NOT NULL');
-        EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'pesel', 'text NOT NULL');
-        EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'znacznik_czasu_utworzenia', 'timestamp without time zone');
-        EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'wazny_do', 'timestamp without time zone');
-        EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'znacznik_czasu_uzycia', 'timestamp without time zone');
+--         IF serwis.czy_tabela_istnieje('jednorazowe_kody_dostepu', 'kody') = false 
+--         THEN
+--                 CREATE TABLE kody.jednorazowe_kody_dostepu
+--                 (
+--                     id serial,
+--                     CONSTRAINT jednorazowe_kody_dostepu_pkey PRIMARY KEY (id)
+--                 );
+--         END IF;
+-- 
+--         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'kod', 'text NOT NULL');
+--         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'pesel', 'text NOT NULL');
+--         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'znacznik_czasu_utworzenia', 'timestamp without time zone');
+--         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'wazny_do', 'timestamp without time zone');
+--         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'znacznik_czasu_uzycia', 'timestamp without time zone');
         
     -------------------------
 	--AUTENTYKACJA

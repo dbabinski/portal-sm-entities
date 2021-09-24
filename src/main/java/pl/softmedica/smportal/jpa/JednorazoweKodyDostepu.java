@@ -26,13 +26,13 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import pl.softmedica.ea.common.interfaces.InterfaceDatabaseObject;
-import pl.softmedica.ea.common.interfaces.InterfaceJSON;
-import pl.softmedica.ea.common.utilities.JSONArrayBuilder;
-import pl.softmedica.ea.common.utilities.JSONBuilder;
-import pl.softmedica.ea.common.utilities.JSONObjectExt;
-import pl.softmedica.ea.common.utilities.LinkedHashMapBuiler;
-import pl.softmedica.ea.common.utilities.Utilities;
+import pl.softmedica.smportal.common.interfaces.InterfaceDatabaseObject;
+import pl.softmedica.smportal.common.interfaces.InterfaceJSON;
+import pl.softmedica.smportal.common.utilities.JSONArrayBuilder;
+import pl.softmedica.smportal.common.utilities.JSONBuilder;
+import pl.softmedica.smportal.common.utilities.JSONObjectExt;
+import pl.softmedica.smportal.common.utilities.LinkedHashMapBuilder;
+import pl.softmedica.smportal.common.utilities.Utilities;
 
 /**
  *
@@ -196,7 +196,7 @@ public class JednorazoweKodyDostepu implements Serializable, InterfaceJSON<Jedno
             .add("waznyDo")
             .build();
 
-    public static final HashMap<String, String> MAPA_POL = new LinkedHashMapBuiler<String, String>()
+    public static final HashMap<String, String> MAPA_POL = new LinkedHashMapBuilder<String, String>()
             .put("kod", "Kod")
             .put("pesel", "PESEL")
             .put("waznyDo", "Ważny do")

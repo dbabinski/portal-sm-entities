@@ -22,15 +22,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.json.simple.JSONObject;
-import pl.softmedica.ea.common.interfaces.InterfaceDatabaseObject;
-import pl.softmedica.ea.common.interfaces.InterfaceJSON;
-import pl.softmedica.ea.common.utilities.JSONBuilder;
-import pl.softmedica.ea.common.utilities.JSONObjectExt;
-import pl.softmedica.ea.common.utilities.Utilities;
+import pl.softmedica.smportal.common.interfaces.InterfaceDatabaseObject;
+import pl.softmedica.smportal.common.interfaces.InterfaceJSON;
+import pl.softmedica.smportal.common.utilities.JSONBuilder;
+import pl.softmedica.smportal.common.utilities.JSONObjectExt;
+import pl.softmedica.smportal.common.utilities.Utilities;
 
 /**
  *
- * @author Łukasz Brzeziński <lukasz.brzezinski@softmedica.pl>
+ * @author Brzeziak
  */
 @Entity
 @Table(schema = "uzytkownicy", name = "zmiana_hasla")
@@ -126,7 +126,7 @@ public class ZmianaHasla implements Serializable, InterfaceJSON<ZmianaHasla>, In
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.ZmianaHasla[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.ZmianaHasla[ id=" + id + " ]";
     }
 
     @Override

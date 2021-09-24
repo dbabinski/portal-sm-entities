@@ -20,11 +20,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.json.simple.JSONObject;
-import pl.softmedica.ea.common.interfaces.InterfaceDatabaseObject;
-import pl.softmedica.ea.common.interfaces.InterfaceJSON;
-import pl.softmedica.ea.common.utilities.JSONArrayBuilder;
-import pl.softmedica.ea.common.utilities.JSONBuilder;
-import pl.softmedica.ea.common.utilities.JSONObjectExt;
+import pl.softmedica.smportal.common.interfaces.InterfaceDatabaseObject;
+import pl.softmedica.smportal.common.interfaces.InterfaceJSON;
+import pl.softmedica.smportal.common.utilities.JSONArrayBuilder;
+import pl.softmedica.smportal.common.utilities.JSONBuilder;
+import pl.softmedica.smportal.common.utilities.JSONObjectExt;
 
 /**
  *
@@ -259,7 +259,7 @@ public class UstawieniaPacjenta implements Serializable, InterfaceJSON<Ustawieni
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.UstawieniaPacjenta[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.UstawieniaPacjenta[ id=" + id + " ]";
     }
 
     @Override

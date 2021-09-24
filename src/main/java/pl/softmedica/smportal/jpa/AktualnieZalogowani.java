@@ -9,10 +9,10 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import org.json.simple.JSONObject;
-import pl.softmedica.ea.common.interfaces.InterfaceJSON;
-import pl.softmedica.ea.common.utilities.JSONBuilder;
-import pl.softmedica.ea.common.utilities.JSONObjectExt;
-import pl.softmedica.ea.common.utilities.Utilities;
+import pl.softmedica.smportal.common.interfaces.InterfaceJSON;
+import pl.softmedica.smportal.common.utilities.JSONBuilder;
+import pl.softmedica.smportal.common.utilities.JSONObjectExt;
+import pl.softmedica.smportal.common.utilities.Utilities;
 
 /**
  *

@@ -23,12 +23,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.json.simple.JSONObject;
-import pl.softmedica.ea.common.interfaces.InterfaceDatabaseObject;
-import pl.softmedica.ea.common.interfaces.InterfaceJSON;
-import pl.softmedica.ea.common.utilities.JSONBuilder;
-import pl.softmedica.ea.common.utilities.LinkedHashMapBuiler;
-import pl.softmedica.ea.common.utilities.ListBuilder;
-import pl.softmedica.ea.common.utilities.Utilities;
+import pl.softmedica.smportal.common.interfaces.InterfaceDatabaseObject;
+import pl.softmedica.smportal.common.interfaces.InterfaceJSON;
+import pl.softmedica.smportal.common.utilities.JSONBuilder;
+import pl.softmedica.smportal.common.utilities.LinkedHashMapBuilder;
+import pl.softmedica.smportal.common.utilities.ListBuilder;
+import pl.softmedica.smportal.common.utilities.Utilities;
 
 /**
  *
@@ -195,13 +195,13 @@ public class Kontrahenci implements Serializable, InterfaceJSON<Kontrahenci>,  I
             .append(kolumnyDoImportu.EMAIL)
             .build();
 
-    public static final HashMap<kolumnyDoImportu, Boolean> OBLIGATORY_COLUMNS_MAP = new LinkedHashMapBuiler<kolumnyDoImportu, Boolean>()
+    public static final HashMap<kolumnyDoImportu, Boolean> OBLIGATORY_COLUMNS_MAP = new LinkedHashMapBuilder<kolumnyDoImportu, Boolean>()
         .put(kolumnyDoImportu.NAZWA, true)
         .put(kolumnyDoImportu.TELEFON_KONTAKTOWY, false)
         .put(kolumnyDoImportu.EMAIL, false)
         .build();
 
-    public static final HashMap<kolumnyDoImportu, String> EXAMPLE_COLUMN_VALUES = new LinkedHashMapBuiler<kolumnyDoImportu, String>()
+    public static final HashMap<kolumnyDoImportu, String> EXAMPLE_COLUMN_VALUES = new LinkedHashMapBuilder<kolumnyDoImportu, String>()
         .put(kolumnyDoImportu.NAZWA, "Kontrahent testowy")
         .put(kolumnyDoImportu.TELEFON_KONTAKTOWY, "000000000")
         .put(kolumnyDoImportu.EMAIL, "test@test.pl")

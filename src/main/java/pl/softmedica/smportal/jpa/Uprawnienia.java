@@ -25,12 +25,12 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import pl.softmedica.ea.common.interfaces.InterfaceDatabaseObject;
-import pl.softmedica.ea.common.interfaces.InterfaceJSON;
-import pl.softmedica.ea.common.utilities.JSONArrayBuilder;
-import pl.softmedica.ea.common.utilities.JSONBuilder;
-import pl.softmedica.ea.common.utilities.JSONObjectExt;
-import pl.softmedica.ea.common.utilities.LinkedHashMapBuiler;
+import pl.softmedica.smportal.common.interfaces.InterfaceDatabaseObject;
+import pl.softmedica.smportal.common.interfaces.InterfaceJSON;
+import pl.softmedica.smportal.common.utilities.JSONArrayBuilder;
+import pl.softmedica.smportal.common.utilities.JSONBuilder;
+import pl.softmedica.smportal.common.utilities.JSONObjectExt;
+import pl.softmedica.smportal.common.utilities.LinkedHashMapBuilder;
 
 /**
  *
@@ -174,7 +174,7 @@ public class Uprawnienia implements Serializable, InterfaceJSON<Uprawnienia>, In
 
     @Override
     public String toString() {
-        return "pl.softmedica.euslugi.jpa.Uprawnienia[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.Uprawnienia[ id=" + id + " ]";
     }
 
     @Override
@@ -213,7 +213,7 @@ public class Uprawnienia implements Serializable, InterfaceJSON<Uprawnienia>, In
             .add("blokowanieKonta")
             .build();
 
-    public static final HashMap<String, String> MAPA_POL = new LinkedHashMapBuiler<String, String>()
+    public static final HashMap<String, String> MAPA_POL = new LinkedHashMapBuilder<String, String>()
             .put("idGrupy", "Nazwa grupy")
             .put("grupa", "Nazwa grupy")
             .put("dodawaniePacjentowPowiazanych", "Dodawanie pacjentów powiązanych")
