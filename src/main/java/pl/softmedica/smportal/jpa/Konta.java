@@ -114,7 +114,11 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
     @NotNull
     @Column(name = "liczba_prob_logowania")
     private int liczbaProbLogowania = 0;
-
+    
+    @OneToMany (mappedBy = "konto")
+    private List<KontaGrupy> kontaGrupy = new ArrayList<>();
+    
+   
     public Konta() {
     }
 
@@ -251,6 +255,15 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
 
     public Konta setPacjentTransient(Pacjenci pacjentTransient) {
         this.pacjentTransient = pacjentTransient;
+        return this;
+    }
+    
+    public List<KontaGrupy> getKontaGrupy() {
+        return kontaGrupy;
+    }
+    
+    public Konta setKontaGrupy(List<KontaGrupy> kontaGrupy) {
+        this.kontaGrupy = kontaGrupy;
         return this;
     }
 

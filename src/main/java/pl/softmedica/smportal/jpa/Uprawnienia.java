@@ -6,8 +6,10 @@
 package pl.softmedica.smportal.jpa;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -52,30 +54,24 @@ public class Uprawnienia implements Serializable, InterfaceJSON<Uprawnienia>, In
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "dodawanie_pacjentow_powiazanych")
-    private boolean dodawaniePacjentowPowiazanych;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "dostep_do_listy_pacjentow")
-    private boolean dostepDoListyPacjentow;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "planowanie_wizyt")
-    private boolean planowanieWizyt;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "dostep_do_kartoteki_pacjenta_powiazanego")
-    private boolean dostepDoKartotekiPacjentaPowiazanego;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "blokowanie_konta")
-    private boolean blokowanieKonta;
+    private int blokowanieKonta = 0;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "administracja")
+    private int administracja = 8;
+    
     @JoinColumn(name = "id_grupy", referencedColumnName = "id")
     @ManyToOne
     private Grupy idGrupy;
-
+    
+    public static final String BLOKOWANIE_KONTA = "blokowanieKonta";
+    public static final String ADMINISTRACJA = "administracja";
+    
     public Uprawnienia() {
     }
 
@@ -89,48 +85,21 @@ public class Uprawnienia implements Serializable, InterfaceJSON<Uprawnienia>, In
         return this;
     }
 
-    public boolean getDodawaniePacjentowPowiazanych() {
-        return dodawaniePacjentowPowiazanych;
-    }
-
-    public Uprawnienia setDodawaniePacjentowPowiazanych(boolean dodawaniePacjentowPowiazanych) {
-        this.dodawaniePacjentowPowiazanych = dodawaniePacjentowPowiazanych;
-        return this;
-    }
-
-    public boolean getDostepDoListyPacjentow() {
-        return dostepDoListyPacjentow;
-    }
-
-    public Uprawnienia setDostepDoListyPacjentow(boolean dostepDoListyPacjentow) {
-        this.dostepDoListyPacjentow = dostepDoListyPacjentow;
-        return this;
-    }
-
-    public boolean getPlanowanieWizyt() {
-        return planowanieWizyt;
-    }
-
-    public Uprawnienia setPlanowanieWizyt(boolean planowanieWizyt) {
-        this.planowanieWizyt = planowanieWizyt;
-        return this;
-    }
-
-    public boolean getDostepDoKartotekiPacjentaPowiazanego() {
-        return dostepDoKartotekiPacjentaPowiazanego;
-    }
-
-    public Uprawnienia setDostepDoKartotekiPacjentaPowiazanego(boolean dostepDoKartotekiPacjentaPowiazanego) {
-        this.dostepDoKartotekiPacjentaPowiazanego = dostepDoKartotekiPacjentaPowiazanego;
-        return this;
-    }
-
-    public boolean getBlokowanieKonta() {
+    public int getBlokowanieKonta() {
         return blokowanieKonta;
     }
 
-    public Uprawnienia setBlokowanieKonta(boolean blokowanieKonta) {
+    public Uprawnienia setBlokowanieKonta(int blokowanieKonta) {
         this.blokowanieKonta = blokowanieKonta;
+        return this;
+    }
+    
+    public int getAdministracja() {
+        return administracja;
+    }
+
+    public Uprawnienia setAdministracja(int administracja) {
+        this.administracja = administracja;
         return this;
     }
 
@@ -148,11 +117,8 @@ public class Uprawnienia implements Serializable, InterfaceJSON<Uprawnienia>, In
         int hash = 7;
         hash = 89 * hash + (id != null ? id.hashCode() : 0);
         hash = 89 * hash + Objects.hashCode(this.idGrupy);
-        hash = 89 * hash + Objects.hashCode(this.dodawaniePacjentowPowiazanych);
-        hash = 89 * hash + Objects.hashCode(this.dostepDoListyPacjentow);
-        hash = 89 * hash + Objects.hashCode(this.planowanieWizyt);
-        hash = 89 * hash + Objects.hashCode(this.dostepDoKartotekiPacjentaPowiazanego);
         hash = 89 * hash + Objects.hashCode(this.blokowanieKonta);
+        hash = 89 * hash + Objects.hashCode(this.administracja);
         return hash;
     }
 
@@ -180,14 +146,8 @@ public class Uprawnienia implements Serializable, InterfaceJSON<Uprawnienia>, In
     @Override
     public JSONObject getJSON() {
         return new JSONBuilder()
-                .put("id", this.id)
-                .put("idGrupy", this.idGrupy != null ? this.idGrupy.getId() : null)
-                .put("grupa", this.idGrupy != null ? this.idGrupy.getJSON() : null)
-                .put("dodawaniePacjentowPowiazanych", this.dodawaniePacjentowPowiazanych)
-                .put("dostepDoListyPacjentow", this.dostepDoListyPacjentow)
-                .put("planowanieWizyt", this.planowanieWizyt)
-                .put("dostepDoKartotekiPacjentaPowiazanego", this.dostepDoKartotekiPacjentaPowiazanego)
-                .put("blokowanieKonta", this.blokowanieKonta)
+                .put(BLOKOWANIE_KONTA, this.blokowanieKonta)
+                .put(ADMINISTRACJA, this.administracja)
                 .build();
     }
 
@@ -195,32 +155,41 @@ public class Uprawnienia implements Serializable, InterfaceJSON<Uprawnienia>, In
     public Uprawnienia setJSON(JSONObject json) {
         if (json != null) {
             JSONObjectExt jsone = new JSONObjectExt(json);
-            this.dodawaniePacjentowPowiazanych = jsone.getBooleanSimple("dodawaniePacjentowPowiazanych");
-            this.dostepDoListyPacjentow = jsone.getBooleanSimple("dostepDoListyPacjentow");
-            this.planowanieWizyt = jsone.getBooleanSimple("planowanieWizyt");
-            this.dostepDoKartotekiPacjentaPowiazanego = jsone.getBooleanSimple("dostepDoKartotekiPacjentaPowiazanego");
-            this.blokowanieKonta = jsone.getBooleanSimple("blokowanieKonta");
+            this.blokowanieKonta = setUprawnienie(jsone.getInteger(BLOKOWANIE_KONTA));
+            this.administracja = setUprawnienie(jsone.getInteger(ADMINISTRACJA));
         }
         return this;
     }
+    
+    private int setUprawnienie(Integer uprawnienie) {
+        if (uprawnienie != null && uprawnienie < 8) {
+            return 0;
+        }
+        return uprawnienie;
+    }
 
+    public static final List<String> UPRAWNIENIA = Arrays.asList (
+            BLOKOWANIE_KONTA,
+            ADMINISTRACJA
+    );
+    
+    public static final List<String> UPRAWNIENIA_KOLUMNY = Arrays.asList (
+            "blokowanie_konta",
+            "administracja"
+    );
+    
+    
     public static final JSONArray POLA_WYMAGANE = new JSONArrayBuilder()
             .add("idGrupy")
-            .add("dodawaniePacjentowPowiazanych")
-            .add("dostepDoListyPacjentow")
-            .add("planowanieWizyt")
-            .add("dostepDoKartotekiPacjentaPowiazanego")
-            .add("blokowanieKonta")
+            .add(BLOKOWANIE_KONTA)
+            .add(ADMINISTRACJA)
             .build();
 
     public static final HashMap<String, String> MAPA_POL = new LinkedHashMapBuilder<String, String>()
             .put("idGrupy", "Nazwa grupy")
             .put("grupa", "Nazwa grupy")
-            .put("dodawaniePacjentowPowiazanych", "Dodawanie pacjentów powiązanych")
-            .put("dostepDoListyPacjentow", "Dostęp do listy pacjentów")
-            .put("planowanieWizyt", "Planowanie wizyt")
-            .put("dostepDoKartotekiPacjentaPowiazanego", "Dostęp do kartoteki pacjenta powiązanego")
-            .put("blokowanieKonta", "Blokowanie konta")
+            .put(BLOKOWANIE_KONTA, "Blokowanie konta")
+            .put(ADMINISTRACJA, "Dostęp do panelu administracyjnego")
             .build();
 
     public static Comparator<Uprawnienia> COMPARATOR_BY_GRUPA = (Uprawnienia o1, Uprawnienia o2) -> {

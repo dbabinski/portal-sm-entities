@@ -560,6 +560,7 @@ BEGIN
 
 	EXECUTE serwis.dodaj_kolumne('uzytkownicy.grupy', 'opis', 'TEXT NOT NULL');
 	EXECUTE serwis.dodaj_kolumne('uzytkownicy.grupy', 'aktywna', 'BOOLEAN NOT NULL DEFAULT FALSE'); --pkt 66
+	EXECUTE serwis.dodaj_kolumne('uzytkownicy.grupy', 'domyslna', 'BOOLEAN NOT NULL DEFAULT FALSE');
 
 	-------------------------
 	--UZYTKOWNICY - KONTA
@@ -589,25 +590,7 @@ BEGIN
 	EXECUTE serwis.dodaj_kolumne('uzytkownicy.konta', 'liczba_prob_logowania', 'integer NOT NULL DEFAULT 0');
 	UPDATE uzytkownicy.konta SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;
 
-	-------------------------
-	--UZYTKOWNICY - KONTA_POWIAZANIA	
-	-------------------------
-/*
-	IF serwis.czy_tabela_istnieje('konta_powiazania', 'uzytkownicy') = false --pkt 32
-	THEN
-		CREATE TABLE uzytkownicy.konta_powiazania
-		(
-			id serial,
-			id_konto_nadrzedne integer,
-			id_konto_podrzedne integer,
-			CONSTRAINT konta_powiazania_pkey PRIMARY KEY (id),
-			CONSTRAINT konta_powiazania_id_konto_nadrzedne_fkey FOREIGN KEY (id_konto_nadrzedne)
-				REFERENCES uzytkownicy.konta (id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE,
-			CONSTRAINT konta_powiazania_id_konto_podrzedne_fkey FOREIGN KEY (id_konto_podrzedne)
-				REFERENCES uzytkownicy.konta (id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE	
-		);
-	END IF;
-*/  
+  
 	DROP TABLE IF EXISTS uzytkownicy.konta_powiazania; /*przeniesienie powiazania z tabeli konta_powiazania do tabeli pracownicy_powiazania*/
 	
 	-------------------------
@@ -630,8 +613,48 @@ BEGIN
 		);
 	END IF;						  
 	-------------------------
-	--UZYTKOWNICY - DOKUMENTY POWIAZANIA --pkt 154.1, 154.2   
+	--UZYTKOWNICY - KONTA GRUPY
 	-------------------------
+
+        IF serwis.czy_tabela_istnieje('konta_grupy','uzytkownicy') = false
+        THEN
+            CREATE TABLE uzytkownicy.konta_grupy (
+                id serial NOT NULL,
+                id_konta integer,
+                id_grupy integer,
+                CONSTRAINT konta_grupy_pkey PRIMARY KEY (id),
+                CONSTRAINT konta_grupy_id_konta_fkey FOREIGN KEY (id_konta)
+                    REFERENCES uzytkownicy.konta (id) MATCH SIMPLE
+                    ON UPDATE RESTRICT
+                    ON DELETE CASCADE,
+               CONSTRAINT konta_grupy_id_grupy_fkey FOREIGN KEY (id_grupy)
+                    REFERENCES uzytkownicy.grupy (id) MATCH SIMPLE
+                    ON UPDATE RESTRICT
+                    ON DELETE CASCADE
+            );
+
+        DROP FUNCTION IF EXISTS uzytkownicy_aktualizuj_powiazania_grupy();
+
+        CREATE OR REPLACE FUNCTION uzytkownicy.aktualizuj_powiazania_grupy()
+        RETURNS boolean AS
+        $done$
+        DECLARE
+        var_rekord record;
+        BEGIN
+            FOR var_rekord IN (
+                SELECT id, id_grupy FROM uzytkownicy.konta
+            )   LOOP
+                INSERT INTO uzytkownicy.konta_grupy (id, id_konta, id_grupy ) VALUES (DEFAULT, var_rekord.id, var_rekord.id_grupy);
+            END LOOP;
+        RETURN true;
+        END;
+        $done$
+        LANGUAGE 'plpgsql';
+
+        PERFORM uzytkownicy.aktualizuj_powiazania_grupy();
+
+        END IF;
+
 	-------------------------
 	--UZYTKOWNICY - UPRAWNIENIA --pkt 38, 49
 	-------------------------
@@ -661,11 +684,58 @@ BEGIN
                 );
         END IF;
 
-	EXECUTE serwis.dodaj_kolumne('uzytkownicy.uprawnienia', 'dodawanie_pacjentow_powiazanych', 'BOOLEAN NOT NULL DEFAULT FALSE'); --pkt 49
-	EXECUTE serwis.dodaj_kolumne('uzytkownicy.uprawnienia', 'dostep_do_listy_pacjentow', 'BOOLEAN NOT NULL DEFAULT FALSE'); --pkt 49
-	EXECUTE serwis.dodaj_kolumne('uzytkownicy.uprawnienia', 'planowanie_wizyt', 'BOOLEAN NOT NULL DEFAULT FALSE'); --pkt 49
-	EXECUTE serwis.dodaj_kolumne('uzytkownicy.uprawnienia', 'dostep_do_kartoteki_pacjenta_powiazanego', 'BOOLEAN NOT NULL DEFAULT FALSE'); --pkt 49
 	EXECUTE serwis.dodaj_kolumne('uzytkownicy.uprawnienia', 'blokowanie_konta', 'BOOLEAN NOT NULL DEFAULT FALSE'); --pkt 53
+        EXECUTE serwis.dodaj_kolumne('uzytkownicy.uprawnienia', 'administracja', 'BOOLEAN NOT NULL DEFAULT FALSE'); --pkt 53
+        
+        IF (SELECT data_type = 'boolean'
+            FROM information_schema.columns
+            WHERE table_schema = 'uzytkownicy' AND table_name = 'uprawnienia' AND column_name = 'dodawanie_pacjentow_powiazanych')
+        THEN 
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dodawanie_pacjentow_powiazanych DROP NOT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dodawanie_pacjentow_powiazanych SET DEFAULT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dodawanie_pacjentow_powiazanych TYPE integer USING CASE WHEN dodawanie_pacjentow_powiazanych THEN 15 ELSE 0 END;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dodawanie_pacjentow_powiazanych SET DEFAULT 0;
+        END IF;
+
+        IF (SELECT data_type = 'boolean'
+            FROM information_schema.columns
+            WHERE table_schema = 'uzytkownicy' AND table_name = 'uprawnienia' AND column_name = 'dostep_do_listy_pacjentow')
+        THEN 
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dostep_do_listy_pacjentow DROP NOT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dostep_do_listy_pacjentow SET DEFAULT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dostep_do_listy_pacjentow TYPE integer USING CASE WHEN dostep_do_listy_pacjentow THEN 15 ELSE 0 END;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dostep_do_listy_pacjentow SET DEFAULT 0;
+        END IF;
+
+        IF (SELECT data_type = 'boolean'
+            FROM information_schema.columns
+            WHERE table_schema = 'uzytkownicy' AND table_name = 'uprawnienia' AND column_name = 'dostep_do_kartoteki_pacjenta_powiazanego')
+        THEN 
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dostep_do_kartoteki_pacjenta_powiazanego DROP NOT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dostep_do_kartoteki_pacjenta_powiazanego SET DEFAULT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dostep_do_kartoteki_pacjenta_powiazanego TYPE integer USING CASE WHEN dostep_do_kartoteki_pacjenta_powiazanego THEN 15 ELSE 0 END;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER dostep_do_kartoteki_pacjenta_powiazanego SET DEFAULT 0;
+        END IF;
+
+        IF (SELECT data_type = 'boolean'
+            FROM information_schema.columns
+            WHERE table_schema = 'uzytkownicy' AND table_name = 'uprawnienia' AND column_name = 'blokowanie_konta')
+        THEN 
+            ALTER TABLE uzytkownicy.uprawnienia ALTER blokowanie_konta DROP NOT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER blokowanie_konta SET DEFAULT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER blokowanie_konta TYPE integer USING CASE WHEN blokowanie_konta THEN 15 ELSE 0 END;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER blokowanie_konta SET DEFAULT 0;
+        END IF;
+
+        IF (SELECT data_type = 'boolean'
+            FROM information_schema.columns
+            WHERE table_schema = 'uzytkownicy' AND table_name = 'uprawnienia' AND column_name = 'administracja')
+        THEN 
+            ALTER TABLE uzytkownicy.uprawnienia ALTER administracja DROP NOT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER administracja SET DEFAULT null;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER administracja TYPE integer USING CASE WHEN administracja THEN 15 ELSE 0 END;
+            ALTER TABLE uzytkownicy.uprawnienia ALTER administracja SET DEFAULT 0;
+        END IF;
 
         -- usuwanie wyzwalacza
 	IF EXISTS (
@@ -726,7 +796,7 @@ BEGIN
 	END IF;
 
         /*ALTER TABLE public.pacjenci DROP CONSTRAINT IF EXISTS pacjenci_id_konta_fkey;
-        ALTER TABLE public.pacjenci ADD CONSTRAINT pacjenci_id_konta_fkey FOREIGN KEY (id_konta)
+        ALTER TABLE public.pacjenci ADD CONST'[RAINT pacjenci_id_konta_fkey FOREIGN KEY (id_konta)
 		REFERENCES uzytkownicy.konta (id) MATCH FULL
 		ON UPDATE RESTRICT ON DELETE SET NULL;*/
 	ALTER TABLE public.pacjenci DROP CONSTRAINT if EXISTS pacjenci_id_konta_fkey;																
@@ -957,29 +1027,6 @@ BEGIN
 --         EXECUTE serwis.dodaj_kolumne('powiadomienia.szablony','szablony_email_tresc','text');
 --         EXECUTE serwis.dodaj_kolumne('powiadomienia.szablony','szablony_sms_tresc','text');
         
-        -------------------------
-	--KODY --pkt 67,68,69
-	-------------------------
-
---         CREATE SCHEMA IF NOT EXISTS kody AUTHORIZATION softmedica;
-
-        -------------------------
-	--KODY - JEDNORAZOWE KODY DOSTĘPU --pkt 67,68,69
-	-------------------------
---         IF serwis.czy_tabela_istnieje('jednorazowe_kody_dostepu', 'kody') = false 
---         THEN
---                 CREATE TABLE kody.jednorazowe_kody_dostepu
---                 (
---                     id serial,
---                     CONSTRAINT jednorazowe_kody_dostepu_pkey PRIMARY KEY (id)
---                 );
---         END IF;
--- 
---         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'kod', 'text NOT NULL');
---         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'pesel', 'text NOT NULL');
---         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'znacznik_czasu_utworzenia', 'timestamp without time zone');
---         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'wazny_do', 'timestamp without time zone');
---         EXECUTE serwis.dodaj_kolumne('kody.jednorazowe_kody_dostepu', 'znacznik_czasu_uzycia', 'timestamp without time zone');
         
     -------------------------
 	--AUTENTYKACJA
