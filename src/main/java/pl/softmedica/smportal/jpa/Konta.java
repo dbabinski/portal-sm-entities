@@ -69,8 +69,7 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
     @Column(name = "id")
     private Integer id;
     @OneToMany(mappedBy = "konto")
-    private List<PacjenciPowiazania> pacjenciPowiazania = new ArrayList<>();
-    ;
+    private List<KlienciPowiazania> klienciPowiazania = new ArrayList<>();
     @Size(max = 2147483647)
     @Column(name = "login")
     private String login;
@@ -109,7 +108,7 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
     @Column(name = "uuid")
     private String uuid = UUID.randomUUID().toString().replace("-", "");
     @Transient
-    private Pacjenci pacjentTransient = null;
+    private Klienci pacjentTransient = null;
     @Basic(optional = false)
     @NotNull
     @Column(name = "liczba_prob_logowania")
@@ -132,12 +131,12 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
         return this;
     }
 
-    public List<PacjenciPowiazania> getPacjenciPowiazania() {
-        return pacjenciPowiazania;
+    public List<KlienciPowiazania> getKlienciPowiazania() {
+        return klienciPowiazania;
     }
 
-    public Konta setPacjenciPowiazania(List<PacjenciPowiazania> pacjenciPowiazania) {
-        this.pacjenciPowiazania = pacjenciPowiazania;
+    public Konta setKlienciPowiazania(List<KlienciPowiazania> klienciPowiazania) {
+        this.klienciPowiazania = klienciPowiazania;
         return this;
     }
 
@@ -249,11 +248,11 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
         return this;
     }
 
-    public Pacjenci getPacjentTransient() {
+    public Klienci getPacjentTransient() {
         return pacjentTransient;
     }
 
-    public Konta setPacjentTransient(Pacjenci pacjentTransient) {
+    public Konta setPacjentTransient(Klienci pacjentTransient) {
         this.pacjentTransient = pacjentTransient;
         return this;
     }
@@ -271,7 +270,7 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
     public int hashCode() {
         int hash = 7;
         hash = 89 * hash + (id != null ? id.hashCode() : 0);
-        hash = 89 * hash + Objects.hashCode(this.pacjenciPowiazania);
+        hash = 89 * hash + Objects.hashCode(this.klienciPowiazania);
         hash = 89 * hash + Objects.hashCode(this.grupa);
         hash = 89 * hash + Objects.hashCode(this.login);
         hash = 89 * hash + Objects.hashCode(this.email);

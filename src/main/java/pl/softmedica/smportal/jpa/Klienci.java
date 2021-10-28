@@ -46,26 +46,23 @@ import pl.softmedica.smportal.common.utilities.Utilities;
  * @author Lucek
  */
 @Entity
-@Table(schema = "public", name = "pacjenci")
+@Table(schema = "public", name = "klienci")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Pacjenci.findAll", query = "SELECT p FROM Pacjenci p"),
-    @NamedQuery(name = "Pacjenci.findById", query = "SELECT p FROM Pacjenci p WHERE p.id = :id")})
-public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, InterfaceUUID<Pacjenci>, InterfaceDatabaseObject{
+    @NamedQuery(name = "Klienci.findAll", query = "SELECT k FROM Klienci k"),
+    @NamedQuery(name = "Klienci.findById", query = "SELECT k FROM Klienci k WHERE k.id = :id")})
+public class Klienci implements Serializable, InterfaceJSON<Klienci>,InterfaceUUID<Klienci>, InterfaceDatabaseObject{
 
     private static final long serialVersionUID = 2933959408002029850L;
 
     @Id
-    @SequenceGenerator(name = "public.pacjenci_id_gen", sequenceName = "public.pacjenci_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "public.pacjenci_id_gen")
+    @SequenceGenerator(name = "public.klienci_id_gen", sequenceName = "public.klienci_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "public.klienci_id_gen")
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @OneToMany(mappedBy = "pacjent")
-    private List<PacjenciPowiazania> pacjenciPowiazania = new ArrayList<>();
-    @JoinColumn(name = "id_typ_dokumentu_tozsamosci", referencedColumnName = "id")
-    @OneToOne
-    private TypyDokumentow typDokumentuTozsamosci;
+    @OneToMany(mappedBy = "klient")
+    private List<KlienciPowiazania> klienciPowiazania = new ArrayList<>();
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2147483647)
@@ -76,11 +73,18 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
     @Size(min = 1, max = 2147483647)
     @Column(name = "nazwisko")
     private String nazwisko;
-    @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2147483647)
-    @Column(name = "pesel")
-    private String pesel;
+    @Column(name = "nazwa_klienta")
+    private String nazwa_klienta;
+    @NotNull
+    @Size(min = 1, max = 2147483647)
+    @Column(name = "nip")
+    private String nip;
+    @NotNull
+    @Size(min = 1, max = 2147483647)
+    @Column(name = "nr_licencji")
+    private String nr_licencji;
     @Size(max = 2147483647)
     @Column(name = "telefon_kontaktowy")
     private String telefonKontaktowy;
@@ -88,15 +92,6 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
     @Size(max = 2147483647)
     @Column(name = "email")
     private String email;
-    @Column(name = "data_urodzenia")
-    @Temporal(TemporalType.DATE)
-    private Date dataUrodzenia;
-    @Size(max = 2147483647)
-    @Column(name = "miejsce_urodzenia")
-    private String miejsceUrodzenia;
-    @Size(max = 2147483647)
-    @Column(name = "plec")
-    private String plec;
     @Size(max = 2147483647)
     @Column(name = "miejscowosc")
     private String miejscowosc;
@@ -112,9 +107,6 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
     @Size(max = 2147483647)
     @Column(name = "nr_lokalu")
     private String nrLokalu;
-    @Size(max = 2147483647)
-    @Column(name = "numer_dokumentu_tozsamosci")
-    private String numerDokumentuTozsamosci;
     @Column(name = "uuid")
     private String uuid = UUID.randomUUID().toString().replace("-", "");
     @Basic(optional = false)
@@ -123,7 +115,7 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
     private boolean potwierdzenieDanych = false;
     
     
-    public Pacjenci() {
+    public Klienci() {
     }
 
     @Override
@@ -131,26 +123,17 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return id;
     }
 
-    public Pacjenci setId(Integer id) {
+    public Klienci setId(Integer id) {
         this.id = id;
         return this;
     }
-    
-    public List<PacjenciPowiazania> getPacjenciPowiazania() {
-        return pacjenciPowiazania;
+
+    public List<KlienciPowiazania> getKlienciPowiazania() {
+        return klienciPowiazania;
     }
 
-    public Pacjenci setPacjenciPowiazania(List<PacjenciPowiazania> pacjenciPowiazania) {
-        this.pacjenciPowiazania = pacjenciPowiazania;
-        return this;
-    }
-    
-    public TypyDokumentow getTypDokumentuTozsamosci() {
-        return typDokumentuTozsamosci;
-    }
-
-    public Pacjenci setIdTypDokumentuTozsamosci(TypyDokumentow typDokumentuTozsamosci) {
-        this.typDokumentuTozsamosci = typDokumentuTozsamosci;
+    public Klienci setKlienciPowiazania(List<KlienciPowiazania> klienciPowiazania) {
+        this.klienciPowiazania = klienciPowiazania;
         return this;
     }
 
@@ -158,7 +141,7 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return imie;
     }
 
-    public Pacjenci setImie(String imie) {
+    public Klienci setImie(String imie) {
         this.imie = imie;
         return this;
     }
@@ -167,17 +150,35 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return nazwisko;
     }
 
-    public Pacjenci setNazwisko(String nazwisko) {
+    public Klienci setNazwisko(String nazwisko) {
         this.nazwisko = nazwisko;
         return this;
     }
 
-    public String getPesel() {
-        return pesel;
+    public String getNazwaKlienta() {
+        return nazwa_klienta;
     }
 
-    public Pacjenci setPesel(String pesel) {
-        this.pesel = pesel;
+    public Klienci setNazwaKlienta(String nazwa_klienta) {
+        this.nazwa_klienta = nazwa_klienta;
+        return this;
+    }
+
+    public String getNip() {
+        return nip;
+    }
+
+    public Klienci setNip(String nip) {
+        this.nip = nip;
+        return this;
+    }
+
+    public String getNrLicencji() {
+        return nr_licencji;
+    }
+
+    public Klienci setNrLicencji(String nr_licencji) {
+        this.nr_licencji = nr_licencji;
         return this;
     }
 
@@ -185,7 +186,7 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return telefonKontaktowy;
     }
 
-    public Pacjenci setTelefonKontaktowy(String telefonKontaktowy) {
+    public Klienci setTelefonKontaktowy(String telefonKontaktowy) {
         this.telefonKontaktowy = telefonKontaktowy;
         return this;
     }
@@ -194,35 +195,8 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return email;
     }
 
-    public Pacjenci setEmail(String email) {
+    public Klienci setEmail(String email) {
         this.email = email;
-        return this;
-    }
-
-    public Date getDataUrodzenia() {
-        return dataUrodzenia;
-    }
-
-    public Pacjenci setDataUrodzenia(Date dataUrodzenia) {
-        this.dataUrodzenia = dataUrodzenia;
-        return this;
-    }
-
-    public String getMiejsceUrodzenia() {
-        return miejsceUrodzenia;
-    }
-
-    public Pacjenci setMiejsceUrodzenia(String miejsceUrodzenia) {
-        this.miejsceUrodzenia = miejsceUrodzenia;
-        return this;
-    }
-
-    public String getPlec() {
-        return plec;
-    }
-
-    public Pacjenci setPlec(String plec) {
-        this.plec = plec;
         return this;
     }
 
@@ -230,7 +204,7 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return miejscowosc;
     }
 
-    public Pacjenci setMiejscowosc(String miejscowosc) {
+    public Klienci setMiejscowosc(String miejscowosc) {
         this.miejscowosc = miejscowosc;
         return this;
     }
@@ -239,7 +213,7 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return kodPocztowy;
     }
 
-    public Pacjenci setKodPocztowy(String kodPocztowy) {
+    public Klienci setKodPocztowy(String kodPocztowy) {
         this.kodPocztowy = kodPocztowy;
         return this;
     }
@@ -248,7 +222,7 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return ulica;
     }
 
-    public Pacjenci setUlica(String ulica) {
+    public Klienci setUlica(String ulica) {
         this.ulica = ulica;
         return this;
     }
@@ -257,7 +231,7 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return nrDomu;
     }
 
-    public Pacjenci setNrDomu(String nrDomu) {
+    public Klienci setNrDomu(String nrDomu) {
         this.nrDomu = nrDomu;
         return this;
     }
@@ -266,17 +240,8 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return nrLokalu;
     }
 
-    public Pacjenci setNrLokalu(String nrLokalu) {
+    public Klienci setNrLokalu(String nrLokalu) {
         this.nrLokalu = nrLokalu;
-        return this;
-    }
-
-    public String getNumerDokumentuTozsamosci() {
-        return numerDokumentuTozsamosci;
-    }
-
-    public Pacjenci setNumerDokumentuTozsamosci(String numerDokumentuTozsamosci) {
-        this.numerDokumentuTozsamosci = numerDokumentuTozsamosci;
         return this;
     }
 
@@ -350,7 +315,7 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
         return potwierdzenieDanych;
     }
 
-    public Pacjenci setPotwierdzenieDanych(boolean potwierdzenieDanych) {
+    public Klienci setPotwierdzenieDanych(boolean potwierdzenieDanych) {
         this.potwierdzenieDanych = potwierdzenieDanych;
         return this;
     }
@@ -359,17 +324,13 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
     public int hashCode() {
         int hash = 7;
         hash = 89 * hash + (id != null ? id.hashCode() : 0);
-        hash = 89 * hash + Objects.hashCode(this.pacjenciPowiazania);
-        hash = 89 * hash + Objects.hashCode(this.typDokumentuTozsamosci);
-        hash = 89 * hash + Objects.hashCode(this.numerDokumentuTozsamosci);
         hash = 89 * hash + Objects.hashCode(this.imie);
         hash = 89 * hash + Objects.hashCode(this.nazwisko);
-        hash = 89 * hash + Objects.hashCode(this.pesel);
         hash = 89 * hash + Objects.hashCode(this.telefonKontaktowy);
+        hash = 89 * hash + Objects.hashCode(this.nazwa_klienta);
+        hash = 89 * hash + Objects.hashCode(this.nip);
+        hash = 89 * hash + Objects.hashCode(this.nr_licencji);
         hash = 89 * hash + Objects.hashCode(this.email);
-        hash = 89 * hash + Objects.hashCode(this.dataUrodzenia);
-        hash = 89 * hash + Objects.hashCode(this.miejsceUrodzenia);
-        hash = 89 * hash + Objects.hashCode(this.plec);
         hash = 89 * hash + Objects.hashCode(this.miejscowosc);
         hash = 89 * hash + Objects.hashCode(this.kodPocztowy);
         hash = 89 * hash + Objects.hashCode(this.ulica);
@@ -380,10 +341,10 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof Pacjenci)) {
+        if (!(object instanceof Klienci)) {
             return false;
         }
-        Pacjenci other = (Pacjenci) object;
+        Klienci other = (Klienci) object;
         if (this.id != null && other.id != null) {
             if (!this.id.equals(other.id)) {
                 return false;
@@ -396,24 +357,20 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
 
     @Override
     public String toString() {
-        return "pl.softmedica.smportal.jpa.Pacjenci[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.klienci[ id=" + id + " ]";
     }
 
     @Override
     public JSONObject getJSON() {
         return new JSONBuilder()
                 .put("id", this.id)
-                .put("idTypDokumentuTozsamosci", this.typDokumentuTozsamosci != null ? this.typDokumentuTozsamosci.getId() : null)
-                .put("typDokumentuTozsamosci", this.typDokumentuTozsamosci != null ? this.typDokumentuTozsamosci.getJSON() : null)
-                .put("numerDokumentuTozsamosci", this.numerDokumentuTozsamosci)
                 .put("imie", this.imie)
                 .put("nazwisko", this.nazwisko)
-                .put("pesel", this.pesel)
+                .put("nazwa_klienta", this.nazwa_klienta)
+                .put("nip", this.nip)
+                .put("nr_licencji", this.nr_licencji)
                 .put("telefonKontaktowy", this.telefonKontaktowy)
                 .put("email", this.email)
-                .put("dataUrodzenia", Utilities.dateToString(this.dataUrodzenia))
-                .put("miejsceUrodzenia", this.miejsceUrodzenia)
-                .put("plec", this.plec)
                 .put("miejscowosc", this.miejscowosc)
                 .put("kodPocztowy", this.kodPocztowy)
                 .put("ulica", this.ulica)
@@ -424,28 +381,26 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
     }
 
     @Override
-    public Pacjenci setJSON(JSONObject json) {
+    public Klienci setJSON(JSONObject json) {
         if (json != null) {
             JSONObjectExt jsone = new JSONObjectExt(json);
             this.imie = jsone.getString("imie");
             this.nazwisko = jsone.getString("nazwisko");
-            this.pesel = jsone.getString("pesel");
+            this.nazwa_klienta = jsone.getString("nazwa_klienta");
+            this.nip = jsone.getString("nip");
+            this.nr_licencji = jsone.getString("nr_licencji");
             this.telefonKontaktowy = jsone.getString("telefonKontaktowy");
             this.email = jsone.getString("email");
-            this.dataUrodzenia = jsone.getDate("dataUrodzenia");
-            this.miejsceUrodzenia = jsone.getString("miejsceUrodzenia");
-            this.plec = jsone.getString("plec");
             this.miejscowosc = jsone.getString("miejscowosc");
             this.kodPocztowy = jsone.getString("kodPocztowy");
             this.ulica = jsone.getString("ulica");
             this.nrDomu = jsone.getString("nrDomu");
             this.nrLokalu = jsone.getString("nrLokalu");
-            this.numerDokumentuTozsamosci = jsone.getString("numerDokumentuTozsamosci");
         }
         return this;
     }
 
-    public static Comparator<Pacjenci> COMPARATOR_BY_NAZWISKO_IMIE = (Pacjenci o1, Pacjenci o2) -> {
+    public static Comparator<Klienci> COMPARATOR_BY_NAZWISKO_IMIE = (Klienci o1, Klienci o2) -> {
         if (o1 != null && o2 != null) {
             int result = Utilities.nullToString(o1.getNazwisko()).toString()
                     .compareTo(Utilities.nullToString(o2.getNazwisko()).toString());
@@ -459,19 +414,16 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
     public static final HashMap<String, String> MAPA_POL = new LinkedHashMapBuilder<String, String>()
             .put("imie", "imię")
             .put("nazwisko", "nazwisko")
-            .put("pesel", "PESEL")
+            .put("nazwa_klienta", "nazwa klienta")
+            .put("nip", "nip")
+            .put("nr_licencji", "nr licencji")
             .put("telefonKontaktowy", "telefon")
             .put("email", "e-mail")
-            .put("dataUrodzenia", "data urodzenia")
-            .put("miejsceUrodzenia", "miejsce urodzenia")
-            .put("plec", "płęć")
             .put("miejscowosc", "miejscowość")
             .put("kodPocztowy", "kod pocztowy")
             .put("ulica", "ulica")
             .put("nrDomu", "nr domu")
             .put("nrLokalu", "nr lokalu")
-            .put("numerDokumentuTozsamosci", "numer dokumentu tożsamości")
-            .put("typDokumentuTozsamosci", "typ dokumentu tożsamości")
             .build();
 
     //--------------------------------------------------------------------------
@@ -483,13 +435,13 @@ public class Pacjenci implements Serializable, InterfaceJSON<Pacjenci>, Interfac
     }
 
     @Override
-    public Pacjenci setUUID(String sid) {
+    public Klienci setUUID(String sid) {
         this.uuid = sid;
         return this;
     }
 
     @Override
-    public Pacjenci setUUID() {
+    public Klienci setUUID() {
         if (uuid == null) {
             this.uuid = UUID.randomUUID().toString();
         }

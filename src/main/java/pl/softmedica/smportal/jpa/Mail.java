@@ -243,7 +243,7 @@ public class Mail implements Serializable, InterfaceJSON<Mail>, InterfaceUUID<Ma
         return message;
     }
 
-    public static String wypelnijSzablon(Konta konto, Pacjenci pacjent, Konfiguracja konfiguracja, String szablon,
+    public static String wypelnijSzablon(Konta konto, Klienci klient, Konfiguracja konfiguracja, String szablon,
             String noweHaslo, String token) {
         if (konto != null && szablon != null && konfiguracja != null) {
             return szablon
@@ -253,11 +253,10 @@ public class Mail implements Serializable, InterfaceJSON<Mail>, InterfaceUUID<Ma
                     .replaceAll("\\[email_administratora\\]", Utilities.nullToString(konfiguracja.getEmailAdministratora()).toString())
                     .replaceAll("\\[uuid\\]", Utilities.nullToString(konto.getUUID()).toString())
                     .replaceAll("\\[login\\]", Utilities.nullToString(konto.getLogin()).toString())
-                    .replaceAll("\\[imie\\]", pacjent != null ? Utilities.nullToString(pacjent.getImie()).toString() : "")
-                    .replaceAll("\\[nazwisko\\]", pacjent != null ? Utilities.nullToString(pacjent.getNazwisko()).toString() : "")
-                    .replaceAll("\\[pesel\\]", pacjent != null ? Utilities.nullToString(pacjent.getPesel()).toString() : "")
+                    .replaceAll("\\[imie\\]", klient != null ? Utilities.nullToString(klient.getImie()).toString() : "")
+                    .replaceAll("\\[nazwisko\\]", klient != null ? Utilities.nullToString(klient.getNazwisko()).toString() : "")
                     .replaceAll("\\[email\\]", konto != null ? Utilities.nullToString(konto.getEmail()).toString()
-                            : (pacjent != null ? Utilities.nullToString(pacjent.getEmail()).toString() : ""))
+                            : (klient != null ? Utilities.nullToString(klient.getEmail()).toString() : ""))
                     .replaceAll("\\[nowe_haslo\\]", noweHaslo != null ? noweHaslo : "")
                     .replaceAll("\\[token\\]", token != null ? token : "")
                     .replaceAll("\\[blokada_konta_do\\]",

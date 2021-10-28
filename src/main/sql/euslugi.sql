@@ -596,20 +596,25 @@ BEGIN
 	-------------------------
 	--UZYTKOWNICY - PRACOWNICY_POWIAZANIA
 	-------------------------
-	
-	IF serwis.czy_tabela_istnieje('pacjenci_powiazania', 'uzytkownicy') = false --pkt 32
+		
+	IF serwis.czy_tabela_istnieje('klienci_powiazania', 'uzytkownicy') = TRUE 
+        THEN 
+            DROP TABLE uzytkownicy.klienci_powiazania CASCADE;
+        END IF;
+
+	IF serwis.czy_tabela_istnieje('klienci_powiazania', 'uzytkownicy') = false --pkt 32
 	THEN
-		CREATE TABLE uzytkownicy.pacjenci_powiazania
+		CREATE TABLE uzytkownicy.klienci_powiazania
 		(
 			id serial,
 			id_konta integer,
-			id_pacjenta integer,
+			id_klienta integer,
 			nadrzedne boolean NOT NULL,
-			CONSTRAINT pacjenci_powiazania_pkey PRIMARY KEY (id),
-			CONSTRAINT pacjenci_powiazania_id_kontoa_fkey FOREIGN KEY (id_konta)
+			CONSTRAINT klienci_powiazania_pkey PRIMARY KEY (id),
+			CONSTRAINT klienci_powiazania_id_kontoa_fkey FOREIGN KEY (id_konta)
 				REFERENCES uzytkownicy.konta (id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE,
-			CONSTRAINT pacjenci_powiazania_id_pacjenta_fkey FOREIGN KEY (id_pacjenta)
-				REFERENCES public.pacjenci(id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE	
+			CONSTRAINT klienci_powiazania_id_klienta_fkey FOREIGN KEY (id_klienta)
+				REFERENCES public.klienci(id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE	
 		);
 	END IF;						  
 	-------------------------
@@ -779,45 +784,35 @@ BEGIN
 	-------------------------
 	--PUBLIC - PACJENCI
 	-------------------------
-	
-	IF serwis.czy_tabela_istnieje('pacjenci', 'public') = false --pkt 2B
+	IF serwis.czy_tabela_istnieje('pacjenci', 'public') = true
+        THEN 
+            DROP table pacjenci CASCADE;
+        END IF;
+
+	IF serwis.czy_tabela_istnieje('klienci', 'public') = false --pkt 2B
 	THEN
-		CREATE TABLE public.pacjenci
+		CREATE TABLE public.klienci
 		(
 			id serial,
-			/*id_konta integer, --pkt 39E, 44, 45 *//*przeniesione do tabeli użytkownicy.pacjenci_powiazania*/
-			id_typ_dokumentu_tozsamosci integer,
-			CONSTRAINT pacjenci_pkey PRIMARY KEY (id),
-			/*CONSTRAINT pacjenci_id_konta_fkey FOREIGN KEY (id_konta)
-				REFERENCES uzytkownicy.konta (id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE RESTRICT,*/
-			CONSTRAINT pacjenci_id_typ_dokumentu_tozsamosci_fkey FOREIGN KEY (id_typ_dokumentu_tozsamosci)
-				REFERENCES slowniki.typy_dokumentow (id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE RESTRICT
+			CONSTRAINT klienci_pkey PRIMARY KEY (id)
 		);
-	END IF;
+	END IF;																
 
-        /*ALTER TABLE public.pacjenci DROP CONSTRAINT IF EXISTS pacjenci_id_konta_fkey;
-        ALTER TABLE public.pacjenci ADD CONST'[RAINT pacjenci_id_konta_fkey FOREIGN KEY (id_konta)
-		REFERENCES uzytkownicy.konta (id) MATCH FULL
-		ON UPDATE RESTRICT ON DELETE SET NULL;*/
-	ALTER TABLE public.pacjenci DROP CONSTRAINT if EXISTS pacjenci_id_konta_fkey;																
-
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'uuid', 'text');
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'imie', 'text NOT NULL'); --pkt 3
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'nazwisko', 'text NOT NULL'); --pkt 3
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'pesel', 'text NOT NULL'); --pkt 4
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'telefon_kontaktowy', 'text'); --pkt 5
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'email', 'text'); --pkt 6
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'data_urodzenia', 'date'); --pkt 7
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'miejsce_urodzenia', 'text'); --pkt 7
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'plec', 'TEXT'); --pkt 8
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'miejscowosc', 'TEXT'); --pkt 9
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'kod_pocztowy', 'TEXT'); --pkt 9
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'ulica', 'TEXT'); --pkt 9
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'nr_domu', 'TEXT'); --pkt 9
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'nr_lokalu', 'TEXT'); --pkt 9		
-        EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'numer_dokumentu_tozsamosci', 'TEXT'); --pkt 9
-	EXECUTE serwis.dodaj_kolumne('public.pacjenci', 'potwierdzenie_danych', 'boolean NOT NULL default false'); --pkt 39
-	UPDATE public.pacjenci SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;																												
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'uuid', 'text');
+        EXECUTE serwis.dodaj_kolumne('public.klienci', 'nazwa_klienta', 'text NOT NULL'); --pkt 3
+        EXECUTE serwis.dodaj_kolumne('public.klienci', 'nip', 'text NOT NULL'); --pkt 3
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'imie', 'text NOT NULL'); --pkt 3
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nazwisko', 'text NOT NULL'); --pkt 3
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_licencji', 'text NOT NULL'); --pkt 4
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'telefon_kontaktowy', 'text'); --pkt 5
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'email', 'text'); --pkt 6
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'miejscowosc', 'TEXT'); --pkt 9
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'kod_pocztowy', 'TEXT'); --pkt 9
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'ulica', 'TEXT'); --pkt 9
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_domu', 'TEXT'); --pkt 9
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_lokalu', 'TEXT'); --pkt 9		
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'potwierdzenie_danych', 'boolean NOT NULL default false'); --pkt 39
+	UPDATE public.klienci SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;																												
 	
 	-------------------------
 	--PUBLIC - PRACOWNICY
@@ -889,7 +884,7 @@ BEGIN
 			CONSTRAINT pacjenci_powiazania_id_kontoa_fkey FOREIGN KEY (id_konta)
 				REFERENCES uzytkownicy.konta (id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE,
 			CONSTRAINT pacjenci_powiazania_id_pacjenta_fkey FOREIGN KEY (id_pacjenta)
-				REFERENCES public.pacjenci(id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE	
+				REFERENCES public.klienci(id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE	
 		);
 	END IF;	
 	

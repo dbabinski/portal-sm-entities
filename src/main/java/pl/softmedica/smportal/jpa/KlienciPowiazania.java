@@ -31,18 +31,18 @@ import pl.softmedica.smportal.common.utilities.JSONBuilder;
  */
 
 @Entity
-@Table(schema = "uzytkownicy", name = "pacjenci_powiazania")
+@Table(schema = "uzytkownicy", name = "klienci_powiazania")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PacjenciPowiazania.findAll", query = "SELECT p FROM PacjenciPowiazania p"),
-    @NamedQuery(name = "PacjenciPowiazania.findById", query = "SELECT p FROM PacjenciPowiazania p WHERE p.id = :id")})
-public class PacjenciPowiazania implements Serializable, InterfaceJSON<PacjenciPowiazania>, InterfaceDatabaseObject {
+    @NamedQuery(name = "KlienciPowiazania.findAll", query = "SELECT p FROM KlienciPowiazania p"),
+    @NamedQuery(name = "KlienciPowiazania.findById", query = "SELECT p FROM KlienciPowiazania p WHERE p.id = :id")})
+public class KlienciPowiazania implements Serializable, InterfaceJSON<KlienciPowiazania>, InterfaceDatabaseObject {
 
     private static final long serialVersionUID = -1074409810004633322L;
 
     @Id
-    @SequenceGenerator(name = "uzytkownicy.pacjenci_powiazania_id_gen", sequenceName = "uzytkownicy.pacjenci_powiazania_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "uzytkownicy.pacjenci_powiazania_id_gen")
+    @SequenceGenerator(name = "uzytkownicy.klienci_powiazania_id_gen", sequenceName = "uzytkownicy.klienci_powiazania_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "uzytkownicy.klienci_powiazania_id_gen")
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;   
@@ -50,11 +50,11 @@ public class PacjenciPowiazania implements Serializable, InterfaceJSON<PacjenciP
     @JoinColumn(name = "id_konta", referencedColumnName = "id")
     @ManyToOne
     private Konta konto;
-    @JoinColumn(name = "id_pacjenta", referencedColumnName = "id")
+    @JoinColumn(name = "id_klienta", referencedColumnName = "id")
     @ManyToOne
-    private Pacjenci pacjent;
+    private Klienci klient;
 
-    public PacjenciPowiazania() {
+    public KlienciPowiazania() {
     }    
     
     @Override
@@ -62,7 +62,7 @@ public class PacjenciPowiazania implements Serializable, InterfaceJSON<PacjenciP
         return id;
     }
 
-    public PacjenciPowiazania setId(Integer id) {
+    public KlienciPowiazania setId(Integer id) {
         this.id = id;
         return this;
     }
@@ -71,17 +71,17 @@ public class PacjenciPowiazania implements Serializable, InterfaceJSON<PacjenciP
         return konto;
     }
 
-    public PacjenciPowiazania setKonto(Konta konto) {
+    public KlienciPowiazania setKonto(Konta konto) {
         this.konto = konto;
         return this;
     }
 
-    public Pacjenci getPacjent() {
-        return pacjent;
+    public Klienci getKlient() {
+        return klient;
     }
 
-    public PacjenciPowiazania setPacjent(Pacjenci pacjent) {
-        this.pacjent = pacjent;
+    public KlienciPowiazania setKlient(Klienci klient) {
+        this.klient = klient;
         return this;
     }
 
@@ -89,7 +89,7 @@ public class PacjenciPowiazania implements Serializable, InterfaceJSON<PacjenciP
         return nadrzedne;
     }
 
-    public PacjenciPowiazania setNadrzedne(Boolean nadrzedne) {
+    public KlienciPowiazania setNadrzedne(Boolean nadrzedne) {
         this.nadrzedne = nadrzedne;
         return this;
     }
@@ -99,17 +99,17 @@ public class PacjenciPowiazania implements Serializable, InterfaceJSON<PacjenciP
         int hash = 7;
         hash = 89 * hash + (id != null ? id.hashCode() : 0);
         hash = 89 * hash + Objects.hashCode(this.konto);
-        hash = 89 * hash + Objects.hashCode(this.pacjent);
+        hash = 89 * hash + Objects.hashCode(this.klient);
         hash = 89 * hash + Objects.hashCode(this.nadrzedne);
         return hash;
     }
     
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof PacjenciPowiazania)) {
+        if (!(object instanceof KlienciPowiazania)) {
             return false;
         }
-        PacjenciPowiazania other = (PacjenciPowiazania) object;
+        KlienciPowiazania other = (KlienciPowiazania) object;
         if (this.id != null && other.id != null) {
             if (!this.id.equals(other.id)) {
                 return false;
@@ -122,7 +122,7 @@ public class PacjenciPowiazania implements Serializable, InterfaceJSON<PacjenciP
     
     @Override
     public String toString() {
-        return "pl.softmedica.smportal.jpa.PracownicyPowiazania[ id=" + id + " ]";
+        return "pl.softmedica.smportal.jpa.KlienciPowiazania[ id=" + id + " ]";
     }
     
     @Override
@@ -130,13 +130,13 @@ public class PacjenciPowiazania implements Serializable, InterfaceJSON<PacjenciP
         return new JSONBuilder()
                 .put("id", this.id)
                 .put("konto", this.konto)
-                .put("pacjent", this.pacjent)
+                .put("klient", this.klient)
                 .put("nadrzedne", this.nadrzedne)
                 .build();
     }
 
     @Override
-    public PacjenciPowiazania setJSON(JSONObject json) {
+    public KlienciPowiazania setJSON(JSONObject json) {
         return this;
     }
     
