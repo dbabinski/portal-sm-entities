@@ -63,17 +63,12 @@ public class Klienci implements Serializable, InterfaceJSON<Klienci>,InterfaceUU
     private Integer id;
     @OneToMany(mappedBy = "klient")
     private List<KlienciPowiazania> klienciPowiazania = new ArrayList<>();
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 2147483647)
     @Column(name = "imie")
     private String imie;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 2147483647)
     @Column(name = "nazwisko")
     private String nazwisko;
-    @NotNull
     @Size(min = 1, max = 2147483647)
     @Column(name = "nazwa_klienta")
     private String nazwa_klienta;
@@ -366,9 +361,9 @@ public class Klienci implements Serializable, InterfaceJSON<Klienci>,InterfaceUU
                 .put("id", this.id)
                 .put("imie", this.imie)
                 .put("nazwisko", this.nazwisko)
-                .put("nazwa_klienta", this.nazwa_klienta)
+                .put("nazwaKklienta", this.nazwa_klienta)
                 .put("nip", this.nip)
-                .put("nr_licencji", this.nr_licencji)
+                .put("nrLicencji", this.nr_licencji)
                 .put("telefonKontaktowy", this.telefonKontaktowy)
                 .put("email", this.email)
                 .put("miejscowosc", this.miejscowosc)
@@ -386,9 +381,9 @@ public class Klienci implements Serializable, InterfaceJSON<Klienci>,InterfaceUU
             JSONObjectExt jsone = new JSONObjectExt(json);
             this.imie = jsone.getString("imie");
             this.nazwisko = jsone.getString("nazwisko");
-            this.nazwa_klienta = jsone.getString("nazwa_klienta");
+            this.nazwa_klienta = jsone.getString("nazwaKlienta");
             this.nip = jsone.getString("nip");
-            this.nr_licencji = jsone.getString("nr_licencji");
+            this.nr_licencji = jsone.getString("nrLicencji");
             this.telefonKontaktowy = jsone.getString("telefonKontaktowy");
             this.email = jsone.getString("email");
             this.miejscowosc = jsone.getString("miejscowosc");
@@ -417,13 +412,13 @@ public class Klienci implements Serializable, InterfaceJSON<Klienci>,InterfaceUU
             .put("nazwa_klienta", "nazwa klienta")
             .put("nip", "nip")
             .put("nr_licencji", "nr licencji")
-            .put("telefonKontaktowy", "telefon")
+            .put("telefon_kontaktowy", "telefon")
             .put("email", "e-mail")
             .put("miejscowosc", "miejscowość")
-            .put("kodPocztowy", "kod pocztowy")
+            .put("kod_pocztowy", "kod pocztowy")
             .put("ulica", "ulica")
-            .put("nrDomu", "nr domu")
-            .put("nrLokalu", "nr lokalu")
+            .put("nr_domu", "nr domu")
+            .put("nr_lokalu", "nr lokalu")
             .build();
 
     //--------------------------------------------------------------------------

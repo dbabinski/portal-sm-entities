@@ -214,6 +214,59 @@ BEGIN
 	$dodaj_kolumne$
 	LANGUAGE plpgsql;
 
+        -------------------------
+	-- DROP KONTRAHENCI , PRACOWNICY
+	-------------------------
+        IF serwis.czy_tabela_istnieje('kontrahenci', 'public') = TRUE 
+        THEN 
+            DROP TABLE public.kontrahenci CASCADE;
+        END IF;
+
+        IF serwis.czy_tabela_istnieje('pracownicy', 'public') = TRUE 
+        THEN 
+            DROP TABLE public.pracownicy CASCADE;
+        END IF;
+
+
+
+        -------------------------
+	--PUBLIC
+	-------------------------
+
+	-------------------------
+	--PUBLIC - PACJENCI
+	-------------------------
+	IF serwis.czy_tabela_istnieje('pacjenci', 'public') = true
+        THEN 
+            DROP table public.pacjenci CASCADE;
+        END IF;
+
+	IF serwis.czy_tabela_istnieje('klienci', 'public') = false --pkt 2B
+	THEN
+		CREATE TABLE public.klienci
+		(
+			id serial,
+			CONSTRAINT klienci_pkey PRIMARY KEY (id)
+		);
+	END IF;																
+
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'uuid', 'text');
+        EXECUTE serwis.dodaj_kolumne('public.klienci', 'nazwa_klienta', 'text'); --pkt 3
+        EXECUTE serwis.dodaj_kolumne('public.klienci', 'nip', 'text'); --pkt 3
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'imie', 'text'); --pkt 3
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nazwisko', 'text'); --pkt 3
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_licencji', 'text'); --pkt 4
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'telefon_kontaktowy', 'text'); --pkt 5
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'email', 'text'); --pkt 6
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'miejscowosc', 'TEXT'); --pkt 9
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'kod_pocztowy', 'TEXT'); --pkt 9
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'ulica', 'TEXT'); --pkt 9
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_domu', 'TEXT'); --pkt 9
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_lokalu', 'TEXT'); --pkt 9		
+	EXECUTE serwis.dodaj_kolumne('public.klienci', 'potwierdzenie_danych', 'boolean NOT NULL default false'); --pkt 39
+	UPDATE public.klienci SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;			
+
+
 	-------------------------
 	--SERWIS - USTAWIENIA PACJENTA
 	-------------------------
@@ -594,8 +647,12 @@ BEGIN
 	DROP TABLE IF EXISTS uzytkownicy.konta_powiazania; /*przeniesienie powiazania z tabeli konta_powiazania do tabeli pracownicy_powiazania*/
 	
 	-------------------------
-	--UZYTKOWNICY - PRACOWNICY_POWIAZANIA
+	--UZYTKOWNICY - KLIENCI_POWIAZANIA
 	-------------------------
+	IF serwis.czy_tabela_istnieje('pacjenci_powiazania', 'uzytkownicy') = TRUE 
+        THEN 
+            DROP TABLE uzytkownicy.pacjenci_powiazania CASCADE;
+        END IF;
 		
 	IF serwis.czy_tabela_istnieje('klienci_powiazania', 'uzytkownicy') = TRUE 
         THEN 
@@ -784,109 +841,37 @@ BEGIN
 	-------------------------
 	--PUBLIC - PACJENCI
 	-------------------------
-	IF serwis.czy_tabela_istnieje('pacjenci', 'public') = true
-        THEN 
-            DROP table pacjenci CASCADE;
-        END IF;
-
-	IF serwis.czy_tabela_istnieje('klienci', 'public') = false --pkt 2B
-	THEN
-		CREATE TABLE public.klienci
-		(
-			id serial,
-			CONSTRAINT klienci_pkey PRIMARY KEY (id)
-		);
-	END IF;																
-
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'uuid', 'text');
-        EXECUTE serwis.dodaj_kolumne('public.klienci', 'nazwa_klienta', 'text NOT NULL'); --pkt 3
-        EXECUTE serwis.dodaj_kolumne('public.klienci', 'nip', 'text NOT NULL'); --pkt 3
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'imie', 'text NOT NULL'); --pkt 3
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nazwisko', 'text NOT NULL'); --pkt 3
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_licencji', 'text NOT NULL'); --pkt 4
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'telefon_kontaktowy', 'text'); --pkt 5
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'email', 'text'); --pkt 6
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'miejscowosc', 'TEXT'); --pkt 9
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'kod_pocztowy', 'TEXT'); --pkt 9
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'ulica', 'TEXT'); --pkt 9
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_domu', 'TEXT'); --pkt 9
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_lokalu', 'TEXT'); --pkt 9		
-	EXECUTE serwis.dodaj_kolumne('public.klienci', 'potwierdzenie_danych', 'boolean NOT NULL default false'); --pkt 39
-	UPDATE public.klienci SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;																												
-	
-	-------------------------
-	--PUBLIC - PRACOWNICY
-	-------------------------
-
-	IF serwis.czy_tabela_istnieje('pracownicy', 'public') = false --pkt 2B
-	THEN
-		CREATE TABLE public.pracownicy
-		(
-			id serial,
-			id_konta integer,
-			CONSTRAINT pracownicy_pkey PRIMARY KEY (id),
-			CONSTRAINT pracownicy_id_konta_fkey FOREIGN KEY (id_konta)
-				REFERENCES uzytkownicy.konta (id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE RESTRICT
-		);
-	END IF;
-	
-	EXECUTE serwis.dodaj_kolumne('public.pracownicy', 'uuid', 'text');															   
-	EXECUTE serwis.dodaj_kolumne('public.pracownicy', 'imie', 'text NOT NULL');
-	EXECUTE serwis.dodaj_kolumne('public.pracownicy', 'nazwisko', 'text NOT NULL');
-	EXECUTE serwis.dodaj_kolumne('public.pracownicy', 'telefon_kontaktowy', 'text');
-	EXECUTE serwis.dodaj_kolumne('public.pracownicy', 'email', 'text');
-	EXECUTE serwis.dodaj_kolumne('public.pracownicy', 'plec', 'text');
-	UPDATE public.pracownicy SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;																							   
-	
-	
-	IF serwis.czy_kolumna_istnieje('public.pracownicy', 'id_komorki_organizacyjnej') = false
-	THEN
-		EXECUTE serwis.dodaj_kolumne('public.pracownicy', 'id_komorki_organizacyjnej', 'integer');
-		ALTER TABLE public.pracownicy
-			ADD CONSTRAINT pracownicy_id_komorki_organizacyjnej_fkey FOREIGN KEY (id_komorki_organizacyjnej) REFERENCES slowniki.komorki_organizacyjne (id) ON UPDATE CASCADE ON DELETE RESTRICT;
-	END IF;
-	
-	-------------------------
-	--PUBLIC - KONTRAHENCI
-	-------------------------
-
-	IF serwis.czy_tabela_istnieje('kontrahenci', 'public') = false --pkt 2B
-	THEN
-		CREATE TABLE public.kontrahenci
-		(
-			id serial,
-			id_konta integer,
-			CONSTRAINT kontrahenci_pkey PRIMARY KEY (id),
-			CONSTRAINT kontrahenci_id_konta_fkey FOREIGN KEY (id_konta)
-				REFERENCES uzytkownicy.konta (id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE RESTRICT
-		);
-	END IF;
-	
-	EXECUTE serwis.dodaj_kolumne('public.kontrahenci', 'uuid', 'text');																
-	EXECUTE serwis.dodaj_kolumne('public.kontrahenci', 'nazwa', 'text NOT NULL');
-	EXECUTE serwis.dodaj_kolumne('public.kontrahenci', 'telefon_kontaktowy', 'text');
-	EXECUTE serwis.dodaj_kolumne('public.kontrahenci', 'email', 'text');
-	EXECUTE serwis.dodaj_kolumne('public.kontrahenci', 'plec', 'text');
-	UPDATE public.kontrahenci SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;																								
-	-------------------------
-	--UZYTKOWNICY - PACJECI_POWIAZANIA
-	-------------------------
-	
-	IF serwis.czy_tabela_istnieje('pacjenci_powiazania', 'uzytkownicy') = false --pkt 32
-	THEN
-		CREATE TABLE uzytkownicy.pacjenci_powiazania
-		(
-			id serial,
-			id_konta integer,
-			id_pacjenta integer,
-			nadrzedne boolean NOT NULL,
-			CONSTRAINT pacjenci_powiazania_pkey PRIMARY KEY (id),
-			CONSTRAINT pacjenci_powiazania_id_kontoa_fkey FOREIGN KEY (id_konta)
-				REFERENCES uzytkownicy.konta (id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE,
-			CONSTRAINT pacjenci_powiazania_id_pacjenta_fkey FOREIGN KEY (id_pacjenta)
-				REFERENCES public.klienci(id) MATCH SIMPLE ON UPDATE RESTRICT ON DELETE CASCADE	
-		);
-	END IF;	
+-- 	IF serwis.czy_tabela_istnieje('pacjenci', 'public') = true
+--         THEN 
+--             DROP table public.pacjenci CASCADE;
+--         END IF;
+-- 
+-- 	IF serwis.czy_tabela_istnieje('klienci', 'public') = false --pkt 2B
+-- 	THEN
+-- 		CREATE TABLE public.klienci
+-- 		(
+-- 			id serial,
+-- 			CONSTRAINT klienci_pkey PRIMARY KEY (id)
+-- 		);
+-- 	END IF;																
+-- 
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'uuid', 'text');
+--         EXECUTE serwis.dodaj_kolumne('public.klienci', 'nazwa_klienta', 'text'); --pkt 3
+--         EXECUTE serwis.dodaj_kolumne('public.klienci', 'nip', 'text'); --pkt 3
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'imie', 'text'); --pkt 3
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nazwisko', 'text'); --pkt 3
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_licencji', 'text'); --pkt 4
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'telefon_kontaktowy', 'text'); --pkt 5
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'email', 'text'); --pkt 6
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'miejscowosc', 'TEXT'); --pkt 9
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'kod_pocztowy', 'TEXT'); --pkt 9
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'ulica', 'TEXT'); --pkt 9
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_domu', 'TEXT'); --pkt 9
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'nr_lokalu', 'TEXT'); --pkt 9		
+-- 	EXECUTE serwis.dodaj_kolumne('public.klienci', 'potwierdzenie_danych', 'boolean NOT NULL default false'); --pkt 39
+-- 	UPDATE public.klienci SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;																												
+-- 	
+																						
 	
 	-------------------------
 	--PORTAL
