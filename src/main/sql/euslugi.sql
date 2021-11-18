@@ -689,7 +689,7 @@ BEGIN
                     ALTER TABLE uzytkownicy.uprawnienia DROP COLUMN dostep_do_kartoteki_pacjenta_powiazanego;
                 END IF;
 
-                IF serwis.czy_kolumna_istnieje('uzytkownicy.uprawnienia', 'dostep_do_kartoteki_pacjenta_powiazanego') = true
+                IF serwis.czy_kolumna_istnieje('uzytkownicy.uprawnienia', 'planowanie_wizyt') = true
                 THEN
                     ALTER TABLE uzytkownicy.uprawnienia DROP COLUMN planowanie_wizyt;
                 END IF;
