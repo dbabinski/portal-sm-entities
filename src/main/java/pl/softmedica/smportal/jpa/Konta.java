@@ -117,6 +117,12 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
     @OneToMany (mappedBy = "konto")
     private List<KontaGrupy> kontaGrupy = new ArrayList<>();
     
+    @Column(name = "imie")
+    private String imie;
+    @Size(max = 2147483647)
+    @Column(name = "nazwisko")
+    private String nazwisko;
+    @Size(max = 2147483647)
    
     public Konta() {
     }
@@ -265,7 +271,25 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
         this.kontaGrupy = kontaGrupy;
         return this;
     }
-
+    
+    public String getImie() {
+        return imie;
+    }
+    
+    public Konta setImie(String imie){
+        this.imie = imie;
+        return this;
+    }
+    
+    public String getNazwisko() {
+        return nazwisko;
+    }
+    
+    public Konta setNaziwsko(String nazwisko) {
+        this.nazwisko = nazwisko;
+        return this;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -280,6 +304,8 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
         hash = 89 * hash + Objects.hashCode(this.blokadaKontaDo);
         hash = 89 * hash + Objects.hashCode(this.blokadaKonta);
         //hash = 89 * hash + Objects.hashCode(this.potwierdzenie);
+        hash = 89 * hash + Objects.hashCode(this.imie);
+        hash = 89 * hash + Objects.hashCode(this.nazwisko);
         return hash;
     }
 
@@ -323,6 +349,8 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
                 .put("blokadaKonta", this.blokadaKonta)
                 .put("isKontrahent", (this.grupa != null && this.grupa.getOpis().equals(Grupy.GRUPA_KONTRAHENCI_OPIS)))
                 //.put("potwierdzenie", this.potwierdzenie)
+                .put("imie", this.imie != null ? this.imie : "")
+                .put("nazwisko", this.nazwisko != null ? this.nazwisko : "")
                 .build();
     }
 
@@ -345,6 +373,8 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
             this.akceptacjaRegulaminu = jsone.getDateTimeSec("akceptacjaRegulaminu");
             this.blokadaKonta = jsone.getBooleanSimple("blokadaKonta");
             this.blokadaKontaDo = blokadaKonta ? jsone.getDateTimeSec("blokadaKontaDo") : null;
+            this.imie = jsone.getString("imie");
+            this.nazwisko = jsone.getString("nazwisko");
             //this.potwierdzenie = jsone.getBooleanSimple("potwierdzenie");
         }
         return this;
@@ -365,6 +395,8 @@ public class Konta implements Serializable, InterfaceJSON<Konta>, InterfaceUUID<
             .put("blokadaKonta", "Blokada konta")
             .put("blokadaKontaDo", "Blokada konta do")
             .put("potwierdzenie", "Konto potwierdzone")
+            .put("imie", "Imię")
+            .put("nazwisko", "Nazwisko")
             .build();
 
     public static Comparator<Konta> COMPARATOR_BY_LOGIN = (Konta o1, Konta o2) -> {

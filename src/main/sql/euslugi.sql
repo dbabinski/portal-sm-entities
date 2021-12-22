@@ -641,7 +641,10 @@ BEGIN
 	EXECUTE serwis.dodaj_kolumne('uzytkownicy.konta', 'potwierdzenie', 'BOOLEAN NOT NULL DEFAULT FALSE'); --pkt 39
 	EXECUTE serwis.dodaj_kolumne('uzytkownicy.konta', 'uuid', 'character varying');
 	EXECUTE serwis.dodaj_kolumne('uzytkownicy.konta', 'liczba_prob_logowania', 'integer NOT NULL DEFAULT 0');
-	UPDATE uzytkownicy.konta SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;
+        EXECUTE serwis.dodaj_kolumne('uzytkownicy.konta', 'imie', 'text'); --pkt 21
+	EXECUTE serwis.dodaj_kolumne('uzytkownicy.konta', 'nazwisko', 'text'); --pkt 21
+	
+        UPDATE uzytkownicy.konta SET uuid = replace(uuid_generate_v4()::text, '-', '') WHERE uuid IS NULL;
 
   
 	DROP TABLE IF EXISTS uzytkownicy.konta_powiazania; /*przeniesienie powiazania z tabeli konta_powiazania do tabeli pracownicy_powiazania*/
