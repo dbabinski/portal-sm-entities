@@ -5,6 +5,7 @@
  */
 package pl.softmedica.smportal.jpa.portal;
 
+import com.sun.java.accessibility.util.EventQueueMonitor;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -189,7 +190,7 @@ public class Aktualnosci implements Serializable, InterfaceJSON<Aktualnosci>, In
                 .put("dataPublikacji", Utilities.dateToString(dataPublikacji))
                 .put("tresc", this.tresc)
                 .put("tytul", this.tytul)
-                .put("skrot", this.skrot)
+                .put("skrot", removeHTML(this.tresc).substring(0, 30) + "...")
                 .put("autor", this.autor)
                 .put("publikacja", this.publikacja)
                 .build();
@@ -224,5 +225,9 @@ public class Aktualnosci implements Serializable, InterfaceJSON<Aktualnosci>, In
             .put("autor", "Autor")
             .put("publikacja", "Publikacja")
             .build();
+
+    public String removeHTML(String str){
+        return str.replaceAll("\\<.*?\\>", "");
+    }
 
 }
